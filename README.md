@@ -57,6 +57,43 @@ python -m venv .venv && source .venv/bin/activate
 pip install -e .
 ```
 
+## Install as a real system font (TTF)
+
+Vacua exports to TTF — installable in macOS, opening to TextEdit, Figma, the
+browser, anything.
+
+```bash
+mise run install      # generates dist/Vacua-{Regular,Medium,Bold}.ttf
+                      # then copies them into ~/Library/Fonts/
+```
+
+Other targets:
+
+```bash
+mise run font         # build only (no install)
+mise run check        # open a browser page that proves the install worked
+mise run uninstall    # remove Vacua-*.ttf from ~/Library/Fonts/
+mise run clean        # delete dist/ and .venv/
+```
+
+After install, **relaunch any app that was already open** (Firefox, TextEdit…) —
+they only enumerate system fonts at startup.
+
+### Did it work?
+
+`mise run check` opens `scripts/check-install.html` in your default browser. The
+page contains one big sentence styled with `font-family: Vacua`. If you see the
+characteristic Vacua barcode-like rendering, the install succeeded. If you see a
+plain monospace fallback (with a red warning), the font is not loaded — likely
+the app needs a restart.
+
+Manual checks:
+
+```bash
+open -a "Font Book" ~/Library/Fonts/Vacua-Regular.ttf   # native macOS viewer
+system_profiler SPFontsDataType 2>/dev/null | grep Vacua
+```
+
 ## Usage — Python
 
 ```python

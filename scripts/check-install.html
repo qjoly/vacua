@@ -1,0 +1,123 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Vacua — install check</title>
+<style>
+  /* Only local() — we deliberately do NOT ship the TTF here.
+     The page must depend on the *installed* system font. */
+  @font-face {
+    font-family: VacuaInstalled;
+    src: local("Vacua-Regular"), local("Vacua Regular"), local("Vacua");
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: VacuaInstalled;
+    src: local("Vacua-Bold"), local("Vacua Bold");
+    font-weight: 700;
+  }
+
+  :root { color-scheme: light dark; }
+  body {
+    margin: 0; padding: 40px 60px;
+    background: #f4f4f4; color: #111;
+    font-family: -apple-system, system-ui, sans-serif;
+  }
+  h1 { font-size: 18px; font-weight: 600; margin: 0 0 8px; letter-spacing: .02em }
+  .hint { font-size: 13px; color: #555; max-width: 70ch; margin: 0 0 32px }
+
+  .stage {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 40px 48px;
+    margin-bottom: 24px;
+  }
+
+  /* The actual test text. If Vacua is installed, this renders as Vacua.
+     If not, it falls back to monospace and the diagnostic block kicks in. */
+  .vacua {
+    font-family: VacuaInstalled, "ZZZ-no-such-font", monospace;
+    font-size: 96px;
+    line-height: 1.15;
+    letter-spacing: .04em;
+  }
+  .vacua.bold { font-weight: 700 }
+  .label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 14px }
+
+  /* Diagnostic — shown only when fallback wins.
+     We compute fallback by measuring a probe glyph: see <script> below. */
+  #verdict {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  #verdict.ok    { background: #d8f5d8; color: #0a5a0a; border: 1px solid #6c6 }
+  #verdict.fail  { background: #f8d7d7; color: #7a0b0b; border: 1px solid #c66 }
+  .help { font-size: 13px; color: #444; margin-top: 18px; max-width: 70ch }
+  code { background: #eee; padding: 1px 6px; border-radius: 3px; font-size: 12px }
+</style>
+
+<h1>Vacua — install check</h1>
+<p class="hint">
+  This page uses <code>local("Vacua")</code> only — no TTF is shipped with it.
+  If the lines below render as Vacua's barcode-like glyphs, the system font is
+  installed and discoverable. If they look like plain monospace, the install
+  failed or the browser needs a restart.
+</p>
+
+<div class="stage">
+  <div class="label">Regular — 96px</div>
+  <div class="vacua">VACUA INSTALLED</div>
+</div>
+
+<div class="stage">
+  <div class="label">Bold — 96px</div>
+  <div class="vacua bold">VACUA INSTALLED</div>
+</div>
+
+<div class="stage">
+  <div class="label">Verdict (auto-detected)</div>
+  <div id="verdict">checking…</div>
+  <div id="help" class="help" hidden></div>
+</div>
+
+<script>
+  // Measure-based detection: render the probe string in (a) the target font with
+  // monospace fallback and (b) monospace alone. If the widths differ, the
+  // browser actually used Vacua. If identical, it fell back.
+  function detectVacua() {
+    const probe = "VACUA INSTALLED ?";
+    const measure = (family) => {
+      const span = document.createElement("span");
+      span.style.cssText =
+        "position:absolute;visibility:hidden;font-size:96px;letter-spacing:.04em;white-space:pre;font-family:" + family;
+      span.textContent = probe;
+      document.body.appendChild(span);
+      const w = span.getBoundingClientRect().width;
+      span.remove();
+      return w;
+    };
+    const wVacua = measure('VacuaInstalled, monospace');
+    const wMono  = measure('monospace');
+    return Math.abs(wVacua - wMono) > 2; // px
+  }
+
+  // Wait for fonts to settle before measuring.
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => {
+    const ok = detectVacua();
+    const v = document.getElementById("verdict");
+    const h = document.getElementById("help");
+    if (ok) {
+      v.className = "ok";
+      v.textContent = "OK — Vacua is installed and rendering above.";
+    } else {
+      v.className = "fail";
+      v.textContent = "FAIL — Vacua is NOT loaded. The text above is the browser fallback (monospace).";
+      h.hidden = false;
+      h.innerHTML =
+        "Try: <code>mise run install</code> — then <strong>fully quit and relaunch</strong> this browser " +
+        "(File → Quit, not just closing the window). macOS only enumerates system fonts at app launch.";
+    }
+  });
+</script>

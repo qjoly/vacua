@@ -1,0 +1,41 @@
+[tools]
+python = "3.13"
+
+[env]
+_.python.venv = { path = ".venv", create = true }
+
+[tasks.setup]
+description = "Install Python deps (fonttools) into the project venv"
+run = "uv pip install -q -e '.[font]'"
+sources = ["pyproject.toml"]
+
+[tasks.font]
+description = "Generate TTF files into dist/"
+depends = ["setup"]
+run = ".venv/bin/python scripts/build_font.py --all"
+sources = ["scripts/build_font.py", "vacua/alphabet.py", "vacua/variants.py"]
+outputs = ["dist/Vacua-Regular.ttf", "dist/Vacua-Medium.ttf", "dist/Vacua-Bold.ttf"]
+
+[tasks.install]
+description = "Generate + install fonts into ~/Library/Fonts/"
+depends = ["font"]
+run = [
+  "cp dist/Vacua-Regular.ttf dist/Vacua-Medium.ttf dist/Vacua-Bold.ttf ~/Library/Fonts/",
+  "echo 'installed → ~/Library/Fonts/Vacua-{Regular,Medium,Bold}.ttf'",
+  "echo 'relaunch Firefox / TextEdit to pick them up'",
+]
+
+[tasks.check]
+description = "Open a browser page that verifies the system install (uses local() only)"
+run = "open scripts/check-install.html"
+
+[tasks.uninstall]
+description = "Remove Vacua-*.ttf from ~/Library/Fonts/"
+run = [
+  "rm -f ~/Library/Fonts/Vacua-Regular.ttf ~/Library/Fonts/Vacua-Medium.ttf ~/Library/Fonts/Vacua-Bold.ttf",
+  "echo 'removed Vacua-*.ttf from ~/Library/Fonts/'",
+]
+
+[tasks.clean]
+description = "Remove dist/ and the project venv"
+run = "rm -rf dist .venv"

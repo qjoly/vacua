@@ -23,6 +23,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=7"]
+font = ["fonttools>=4.50"]
 
 [project.scripts]
 vacua = "vacua.__main__:main"

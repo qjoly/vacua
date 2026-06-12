@@ -220,6 +220,28 @@ img.save(<span class="s">"vacua.png"</span>)</pre>
         </p>
       </div>
     </div>
+
+    <div style="margin-top:48px;">
+      <p><strong>System font (TTF) &mdash; install on macOS</strong></p>
+      <p style="font-size:13px; max-width:62ch;">
+        Vacua exports to a real TrueType file. Once installed, it is available
+        in every native app (TextEdit, Figma, Pages, browsers&hellip;).
+      </p>
+<pre class="code"><span class="c"># build dist/Vacua-{Regular,Medium,Bold}.ttf and copy to ~/Library/Fonts/</span>
+mise run install
+
+<span class="c"># other tasks</span>
+mise run font        <span class="c"># build only</span>
+mise run check       <span class="c"># open a browser page that proves the install worked</span>
+mise run uninstall   <span class="c"># remove Vacua-*.ttf from ~/Library/Fonts/</span></pre>
+      <p style="font-size:13px; max-width:62ch; margin-top:12px;">
+        Fully quit and relaunch any app that was already open &mdash; macOS only
+        enumerates system fonts at app startup. To confirm, run
+        <code>mise run check</code>: the page displays
+        <em>VACUA INSTALLED</em> in Vacua and prints a green/red verdict
+        automatically.
+      </p>
+    </div>
   </section>
 
   <section id="docs">
