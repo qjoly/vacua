@@ -71,41 +71,36 @@
 
   <section id="principle">
     <h2 class="section-title" data-num="01">The principle</h2>
-    <div class="two-col">
-      <div>
-        <p>
-          A cell is conceptually filled with five vertical strokes. We
-          <strong>remove</strong> the segments that the letter passes through.
-          What stays drawn is the matter around the void; the void is the
-          letter.
-        </p>
-        <p>
-          The trap, when you try to add a character: you do not draw the
-          letter. You draw <em>everything except</em> the letter.
-        </p>
-      </div>
-      <div class="principle-demo">
-<pre>| | | | |
-| | | | |
-| | | | |
-| | | | |
+    <p style="max-width:60ch; margin-bottom:24px;">
+      Convention: <code>█</code> = stroke we <strong>keep</strong> (drawn
+      matter) · <code>.</code> = stroke we <strong>erase</strong>
+      (the void &mdash; which forms the letter).
+    </p>
+    <div class="principle-demo">
+<pre>   Step 1                Step 2                  Step 3
+   ──────                ──────                  ──────
+   5 × 9 grid of         pick a letter (E)       what remains is
+   vertical strokes      and erase its cells     what gets printed
 
-| | | | |
-| | | | |
-| | | | |
-| | | | |</pre>
-        <div class="arrow">&rarr;</div>
-<pre>█ . . . .
-█ . . . .
-█ . . . .
-█ . . . .
-█ █ █ █ █
-█ . . . .
-█ . . . .
-█ . . . .
-█ . . . .</pre>
-      </div>
+   │ │ │ │ │             . . . . .               . . . . .
+   │ │ │ │ │             . █ █ █ █               . █ █ █ █
+   │ │ │ │ │             . █ █ █ █               . █ █ █ █
+   │ │ │ │ │     ──►     . █ █ █ █       ──►     . █ █ █ █
+   │ │ │ │ │             . . . . .               . . . . .
+   │ │ │ │ │             . █ █ █ █               . █ █ █ █
+   │ │ │ │ │             . █ █ █ █               . █ █ █ █
+   │ │ │ │ │             . █ █ █ █               . █ █ █ █
+   │ │ │ │ │             . . . . .               . . . . .
+
+                         the `.` cells trace      look only at the █:
+                         the shape of E           the E reads in the gap</pre>
     </div>
+    <p style="max-width:60ch; margin-top:24px;">
+      The trap when adding a glyph: <strong>you don't draw the letter &mdash;
+      you draw everything around it.</strong> Squint at the <code>█</code>
+      block above; the <code>E</code> is the missing column-0 and the missing
+      middle band.
+    </p>
   </section>
 
   <section id="play">

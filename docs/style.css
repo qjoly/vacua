@@ -112,28 +112,21 @@ h2.section-title::after {
 .principle-demo {
   background: var(--dark);
   color: var(--paper);
-  padding: 32px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 32px;
+  padding: 28px 32px;
   font-family: "JetBrains Mono", monospace;
+  overflow-x: auto;
 }
 .principle-demo pre {
   margin: 0;
-  font-size: 12px;
-  line-height: 1.4;
+  font-size: 13px;
+  line-height: 1.45;
   white-space: pre;
-  letter-spacing: 0.05em;
-}
-.principle-demo .arrow {
-  text-align: center;
-  font-size: 24px;
-  color: var(--blue);
+  letter-spacing: 0.02em;
+  min-width: 0;
 }
 @media (max-width: 720px) {
-  .principle-demo { grid-template-columns: 1fr; }
-  .principle-demo .arrow { transform: rotate(90deg); }
+  .principle-demo { padding: 20px; }
+  .principle-demo pre { font-size: 11px; }
 }
 
 /* PLAYGROUND ─────────────────────────────────────────────────── */
