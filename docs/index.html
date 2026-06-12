@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vacua — a negative-space font</title>
+<meta name="description" content="Vacua: an experimental modular font where each letter is drawn by the absence of vertical strokes on a 5×9 grid.">
+<link rel="canonical" href="https://qjoly.github.io/vacua/">
+
+<!-- Open Graph (Discord, Facebook, LinkedIn, Bluesky, Slack, …) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Vacua">
+<meta property="og:title" content="Vacua — a negative-space font">
+<meta property="og:description" content="An experimental modular display font. Each letter is drawn by the absence of vertical strokes on a 5 × 9 grid — never by their presence.">
+<meta property="og:url" content="https://qjoly.github.io/vacua/">
+<meta property="og:image" content="https://qjoly.github.io/vacua/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The word VACUA rendered in the Vacua negative-space font.">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Vacua — a negative-space font">
+<meta name="twitter:description" content="An experimental modular display font. Each letter is the absence of vertical strokes on a 5 × 9 grid.">
+<meta name="twitter:image" content="https://qjoly.github.io/vacua/og.png">
+<meta name="twitter:image:alt" content="The word VACUA rendered in the Vacua negative-space font.">
+<meta name="twitter:creator" content="@qjoly">
+
+<!-- Discord embed accent color -->
+<meta name="theme-color" content="#F4F2EC">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="top">
+    <div class="brand">VACUA / 5×9</div>
+    <nav>
+      <a href="#principle">Principle</a>
+      <a href="#play">Playground</a>
+      <a href="#alphabet">Alphabet</a>
+      <a href="#ligatures">Ligatures</a>
+      <a href="#use">Use</a>
+      <a href="https://github.com/qjoly/vacua">GitHub</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div class="word" id="hero-word"></div>
+    <div class="strap">
+      <p>
+        An experimental modular display font. Each letter is drawn by the
+        <strong>absence</strong> of vertical strokes on a 5 × 9 grid &mdash;
+        never by their presence.
+      </p>
+      <div>
+        <div class="meta">Generative · Modular · MIT</div>
+        <p style="margin-top:12px">
+          Belongs to the lineage of Wim Crouwel's <em>New Alphabet</em> (1967)
+          and to the tradition of generative typography where the whole
+          alphabet fits in a table.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <section id="principle">
+    <h2 class="section-title" data-num="01">The principle</h2>
+    <div class="two-col">
+      <div>
+        <p>
+          A cell is conceptually filled with five vertical strokes. We
+          <strong>remove</strong> the segments that the letter passes through.
+          What stays drawn is the matter around the void; the void is the
+          letter.
+        </p>
+        <p>
+          The trap, when you try to add a character: you do not draw the
+          letter. You draw <em>everything except</em> the letter.
+        </p>
+      </div>
+      <div class="principle-demo">
+<pre>| | | | |
+| | | | |
+| | | | |
+| | | | |
+
+| | | | |
+| | | | |
+| | | | |
+| | | | |</pre>
+        <div class="arrow">&rarr;</div>
+<pre>█ . . . .
+█ . . . .
+█ . . . .
+█ . . . .
+█ █ █ █ █
+█ . . . .
+█ . . . .
+█ . . . .
+█ . . . .</pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="play">
+    <h2 class="section-title" data-num="02">Converter</h2>
+    <p style="margin-bottom:24px; max-width:60ch;">
+      Plain text in &mdash; Vacua glyphs out. Type anything, pick a weight,
+      then export the result as SVG (vector, infinite zoom) or PNG.
+    </p>
+    <div class="playground">
+      <label for="vacua-input">Plain text</label>
+      <input id="vacua-input" type="text" value="VACUA" spellcheck="false" autocomplete="off" placeholder="HELLO WORLD">
+
+      <div class="controls">
+        <div class="ctrl">
+          <span class="ctrl-label">Weight</span>
+          <div class="seg" id="weight-seg">
+            <button type="button" data-w="thin">Thin</button>
+            <button type="button" data-w="medium" class="on">Medium</button>
+            <button type="button" data-w="bold">Bold</button>
+          </div>
+        </div>
+        <div class="ctrl-spacer"></div>
+        <div class="ctrl-actions">
+          <button type="button" id="dl-svg">Download SVG</button>
+          <button type="button" id="dl-png">Download PNG</button>
+          <button type="button" id="copy-svg">Copy SVG</button>
+        </div>
+      </div>
+
+      <div class="render" id="vacua-render"></div>
+      <div class="hint" id="convert-hint">A–Z and "?" only · the top-left nub is the start-of-letter marker</div>
+    </div>
+  </section>
+
+  <section id="alphabet">
+    <h2 class="section-title" data-num="03">The full alphabet</h2>
+    <p style="margin-bottom:24px; max-width:60ch;">
+      Angular letters (E, F, H, I, L, T) read very well. Round ones (C, O, Q)
+      and diagonals (K, X, Z) are more <em>suggested</em> than drawn &mdash;
+      inherent to a 5-column resolution, and it reinforces the cryptic feel.
+      A few glyphs (I, T, Y, Z) are hand-tuned to break collisions.
+    </p>
+    <div class="chart-wrap" id="chart"></div>
+  </section>
+
+  <section id="ligatures">
+    <h2 class="section-title" data-num="04">Rotation ligatures</h2>
+    <div class="two-col">
+      <div>
+        <p>
+          Two letters can be condensed: the second is the whole glyph rotated
+          90°. Its strokes become horizontal <em>through the rotation</em>,
+          not by a redesign. Overlay a vertical and a horizontal letter
+          &rarr; a woven grid. Recover the second letter by rotating the
+          medium a quarter turn.
+        </p>
+        <p>
+          An orientation-based cipher: read one way, then the other. The
+          geometric pitfall &mdash; the cell is 5×9, so the rotation needs a
+          square <code>9×9</code> base with a centring offset.
+        </p>
+      </div>
+      <div class="lig-grid" id="lig-grid"></div>
+    </div>
+  </section>
+
+  <section id="variants">
+    <h2 class="section-title" data-num="05">Variants</h2>
+    <table class="variants-table">
+      <thead><tr><th>Variant</th><th>Stroke</th><th>Columns</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr><td>Regular</td><td>thin</td><td>spaced</td><td>specimens, charts</td></tr>
+        <tr><td>Medium</td><td>medium</td><td>spaced</td><td>default</td></tr>
+        <tr><td>Bold</td><td>thick</td><td>spaced</td><td>titles</td></tr>
+        <tr><td>Solid</td><td>n/a</td><td>merged</td><td>only the void remains</td></tr>
+        <tr><td>Solid narrow</td><td>n/a</td><td>merged thin</td><td>slender glyphs</td></tr>
+        <tr><td>Thin joined</td><td>thin</td><td>tight</td><td>Regular/Solid compromise</td></tr>
+        <tr><td>Condensed</td><td>thin</td><td>narrow</td><td>compact spacing</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:16px; color:var(--muted); font-size:12px;">
+      All variants are parameters of the same renderer, not separate alphabets.
+    </p>
+  </section>
+
+  <section id="use">
+    <h2 class="section-title" data-num="06">Use</h2>
+    <div class="two-col">
+      <div>
+        <p><strong>Install</strong></p>
+<pre class="code"><span class="c"># clone + editable install</span>
+python -m venv .venv &amp;&amp; source .venv/bin/activate
+pip install -e .</pre>
+
+        <p style="margin-top:24px"><strong>CLI</strong></p>
+<pre class="code">python -m vacua <span class="s">"HELLO"</span> --weight bold -o specimen.png
+python -m vacua --chart -o chart.png
+python -m vacua <span class="s">"A"</span> --ligature --rotate B -o lig.png
+python -m vacua <span class="s">"VACUA"</span> --scad -o out/vacua.scad</pre>
+      </div>
+      <div>
+        <p><strong>Python</strong></p>
+<pre class="code"><span class="k">from</span> vacua <span class="k">import</span> render_text, BOLD
+
+img = render_text(<span class="s">"VACUA"</span>, style=BOLD)
+img.save(<span class="s">"vacua.png"</span>)</pre>
+
+        <p style="margin-top:24px"><strong>OpenSCAD &rarr; 3D print</strong></p>
+        <p style="font-size:13px;">
+          The <code>scad/vacua_param.scad</code> file is standalone &mdash; the
+          whole alphabet is encoded inside. Edit the <code>text</code>
+          variable, open in OpenSCAD, export to STL.
+        </p>
+        <p style="font-size:13px;">
+          See <a href="3d_printing.md">docs/3d_printing.md</a> for the full
+          parameter list.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="docs">
+    <h2 class="section-title" data-num="07">Read further</h2>
+    <ul style="list-style:none; padding:0; margin:0; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px;">
+      <li><a href="specification.md">Specification &rarr;</a><br><span style="color:var(--muted); font-size:12px;">The full system: grid, data model, hand-tuned letters, variants, ligatures, colors.</span></li>
+      <li><a href="pitfalls.md">Pitfalls &rarr;</a><br><span style="color:var(--muted); font-size:12px;">The void you fill, the 5×9 rotation that doesn't fit in 5×9.</span></li>
+      <li><a href="3d_printing.md">3D printing &rarr;</a><br><span style="color:var(--muted); font-size:12px;">OpenSCAD → STL pipeline, parameters, keychain wrapper.</span></li>
+    </ul>
+  </section>
+
+  <footer class="bottom">
+    <div>VACUA · MIT</div>
+    <div><a href="https://github.com/qjoly/vacua">qjoly/vacua</a></div>
+  </footer>
+
+</div>
+
+<script src="vacua.js"></script>
+<script>
+  // Hero — large "VACUA".
+  document.getElementById("hero-word").innerHTML =
+    Vacua.renderWord("VACUA", { cell: 28, barW: 16, gap: 36 });
+
+  // Converter — text → Vacua SVG, with weight selector and export.
+  const input = document.getElementById("vacua-input");
+  const render = document.getElementById("vacua-render");
+  const hint = document.getElementById("convert-hint");
+  const weightSeg = document.getElementById("weight-seg");
+
+  // barW per weight, at cell=20.
+  const WEIGHTS = { thin: 6, medium: 11, bold: 15 };
+  let weight = "medium";
+
+  function currentText() {
+    return (input.value || "").toUpperCase();
+  }
+
+  function unsupportedChars(t) {
+    const bad = new Set();
+    for (const ch of t) {
+      if (ch === " ") continue;
+      if (!Vacua.INK_BANDS[ch]) bad.add(ch);
+    }
+    return [...bad];
+  }
+
+  function paint() {
+    const t = currentText() || " ";
+    const barW = WEIGHTS[weight];
+    render.innerHTML = Vacua.renderWord(t, { cell: 20, barW, gap: 26, color: "#F4F2EC" });
+    const bad = unsupportedChars(t);
+    if (bad.length) {
+      hint.textContent = `Ignored (not in alphabet): ${bad.map(c => JSON.stringify(c)).join(" ")}`;
+      hint.style.color = "#E15A3C";
+    } else {
+      hint.textContent = `A–Z and "?" only · the top-left nub is the start-of-letter marker`;
+      hint.style.color = "";
+    }
+  }
+
+  input.addEventListener("input", paint);
+  weightSeg.addEventListener("click", e => {
+    const btn = e.target.closest("button[data-w]");
+    if (!btn) return;
+    weight = btn.dataset.w;
+    [...weightSeg.querySelectorAll("button")].forEach(b => b.classList.toggle("on", b === btn));
+    paint();
+  });
+  paint();
+
+  // Exports — re-render at a chosen color for download (dark on paper).
+  function exportSVG() {
+    const t = currentText() || " ";
+    return Vacua.renderWord(t, { cell: 20, barW: WEIGHTS[weight], gap: 26, color: "#0F1B33" });
+  }
+
+  function safeName() {
+    const t = currentText().replace(/[^A-Z0-9?]+/g, "_").replace(/^_+|_+$/g, "");
+    return (t || "vacua") + "-" + weight;
+  }
+
+  function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  document.getElementById("dl-svg").addEventListener("click", () => {
+    downloadBlob(new Blob([exportSVG()], { type: "image/svg+xml" }), safeName() + ".svg");
+  });
+
+  document.getElementById("dl-png").addEventListener("click", () => {
+    const svgText = exportSVG();
+    // Parse the SVG to read its viewBox → target 4× upscale for crispness.
+    const vb = svgText.match(/viewBox="([^"]+)"/);
+    const [, , w, h] = (vb ? vb[1] : "0 0 100 100").split(/\s+/).map(Number);
+    const scale = 4;
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.ceil(w * scale);
+    canvas.height = Math.ceil(h * scale);
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#F4F2EC";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const img = new Image();
+    const blob = new Blob([svgText], { type: "image/svg+xml" });
+    const url = URL.createObjectURL(blob);
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+      canvas.toBlob(b => downloadBlob(b, safeName() + ".png"), "image/png");
+    };
+    img.src = url;
+  });
+
+  document.getElementById("copy-svg").addEventListener("click", async () => {
+    const btn = document.getElementById("copy-svg");
+    const orig = btn.textContent;
+    try {
+      await navigator.clipboard.writeText(exportSVG());
+      btn.textContent = "Copied ✓";
+    } catch {
+      btn.textContent = "Copy failed";
+    }
+    setTimeout(() => { btn.textContent = orig; }, 1400);
+  });
+
+  // Full alphabet chart.
+  document.getElementById("chart").innerHTML = Vacua.renderChart({ cell: 14, barW: 8, cols: 9 });
+
+  // Some pretty ligature pairs.
+  const pairs = [["V","B"], ["A","C"], ["E","T"], ["O","X"], ["H","I"], ["M","N"]];
+  document.getElementById("lig-grid").innerHTML = pairs.map(([a,b]) => `
+    <div class="lig-cell">
+      ${Vacua.renderLigature(a, b, { cell: 12, barW: 6.5 })}
+      <div class="pair"><span class="a">${a}</span> + <span class="b">${b}</span></div>
+    </div>`).join("");
+</script>
+</body>
+</html>

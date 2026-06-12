@@ -14,36 +14,32 @@ Wim Crouwel, 1967).
 
 ## The principle in one picture (ASCII)
 
-Default cell, letter `E`:
+Convention: `█` = stroke we **keep** (drawn matter) · `.` = stroke we
+**erase** (the void — which forms the letter).
 
 ```
-| | | | |       <- 5 columns of vertical strokes
-| | | | |
-| | | | |
-| | | | |
-                <- emptied bands = the letter's shape
-| | | | |
-| | | | |
-| | | | |
-| | | | |
+   Step 1                Step 2                  Step 3
+   ──────                ──────                  ──────
+   5 × 9 grid of         pick a letter (E)       what remains is
+   vertical strokes      and erase its cells     what gets printed
+
+   │ │ │ │ │             . . . . .               . . . . .
+   │ │ │ │ │             . █ █ █ █               . █ █ █ █
+   │ │ │ │ │             . █ █ █ █               . █ █ █ █
+   │ │ │ │ │     ──►     . █ █ █ █       ──►     . █ █ █ █
+   │ │ │ │ │             . . . . .               . . . . .
+   │ │ │ │ │             . █ █ █ █               . █ █ █ █
+   │ │ │ │ │             . █ █ █ █               . █ █ █ █
+   │ │ │ │ │             . █ █ █ █               . █ █ █ █
+   │ │ │ │ │             . . . . .               . . . . .
+
+                         the `.` cells trace      look only at the █:
+                         the shape of E           the E reads in the gap
 ```
 
-Becomes (we remove the bands that make up "E"):
-
-```
-█ . . . .       <- col 0: FULL (entirely emptied = thick vertical bar)
-█ . . . .
-█ . . . .
-█ . . . .
-█ █ █ █ █       <- cols 0..4 all emptied on this band
-█ . . . .
-█ . . . .
-█ . . . .
-█ . . . .
-```
-
-The `█` represents the **remaining stroke** (what we draw), the `.` the
-**void** (i.e. the conceptual shape of the letter).
+The trap when adding a glyph: **you don't draw the letter — you draw
+everything around it.** Squint at the `█` block above; the `E` is the
+missing column-0 and the missing middle band.
 
 ## Why it's interesting
 

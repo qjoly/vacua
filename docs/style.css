@@ -1,0 +1,349 @@
+/* Vacua — site stylesheet.
+   Palette from docs/specification.md §8:
+     paper #F4F2EC, dark #0F1B33, blue #2E6FE8, red #E15A3C. */
+
+:root {
+  --paper: #F4F2EC;
+  --dark: #0F1B33;
+  --blue: #2E6FE8;
+  --red: #E15A3C;
+  --line: rgba(15, 27, 51, 0.12);
+  --muted: rgba(15, 27, 51, 0.6);
+  --cell: 14px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--dark);
+  font-family: "JetBrains Mono", "IBM Plex Mono", "SF Mono", ui-monospace, Menlo, monospace;
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--blue); text-decoration: none; border-bottom: 1px solid currentColor; }
+a:hover { color: var(--red); }
+
+/* The whole page rides on a 5-column grid — quiet reference to the glyph grid. */
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 32px clamp(16px, 4vw, 48px) 96px;
+}
+
+header.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+header.top .brand { font-weight: 700; }
+header.top nav a { margin-left: 18px; border: 0; color: var(--dark); }
+header.top nav a:hover { color: var(--blue); }
+
+/* HERO ───────────────────────────────────────────────────────── */
+.hero {
+  padding: 56px 0 24px;
+  border-bottom: 1px solid var(--line);
+}
+.hero .word {
+  width: 100%;
+  display: block;
+}
+.hero .word svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.hero .strap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 32px;
+  font-size: 15px;
+}
+.hero .strap p { margin: 0; }
+.hero .strap .meta { color: var(--muted); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; }
+@media (max-width: 720px) { .hero .strap { grid-template-columns: 1fr; } }
+
+/* SECTIONS ───────────────────────────────────────────────────── */
+section { padding: 64px 0; border-bottom: 1px solid var(--line); }
+section:last-of-type { border-bottom: 0; }
+
+h2.section-title {
+  margin: 0 0 32px;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+h2.section-title::before {
+  content: attr(data-num);
+  color: var(--blue);
+  font-weight: 700;
+}
+h2.section-title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+@media (max-width: 720px) { .two-col { grid-template-columns: 1fr; gap: 24px; } }
+
+/* PRINCIPLE ──────────────────────────────────────────────────── */
+.principle-demo {
+  background: var(--dark);
+  color: var(--paper);
+  padding: 32px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 32px;
+  font-family: "JetBrains Mono", monospace;
+}
+.principle-demo pre {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: pre;
+  letter-spacing: 0.05em;
+}
+.principle-demo .arrow {
+  text-align: center;
+  font-size: 24px;
+  color: var(--blue);
+}
+@media (max-width: 720px) {
+  .principle-demo { grid-template-columns: 1fr; }
+  .principle-demo .arrow { transform: rotate(90deg); }
+}
+
+/* PLAYGROUND ─────────────────────────────────────────────────── */
+.playground {
+  background: var(--dark);
+  color: var(--paper);
+  padding: 32px;
+}
+.playground label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  color: rgba(244, 242, 236, 0.6);
+}
+.playground input {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid rgba(244, 242, 236, 0.3);
+  color: var(--paper);
+  padding: 8px 0 14px;
+  font-family: inherit;
+  font-size: 18px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  outline: none;
+}
+.playground input:focus { border-bottom-color: var(--blue); }
+.playground .render {
+  margin-top: 32px;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.playground .render svg {
+  max-width: 100%;
+  max-height: 220px;
+  width: auto;
+  height: auto;
+}
+.playground .hint {
+  margin-top: 20px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(244, 242, 236, 0.5);
+}
+
+/* Converter controls — weight selector + export buttons. */
+.playground .controls {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+}
+.playground .ctrl-spacer { flex: 1; }
+.playground .ctrl {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.playground .ctrl-label {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(244, 242, 236, 0.6);
+}
+.playground .seg {
+  display: inline-flex;
+  border: 1px solid rgba(244, 242, 236, 0.25);
+}
+.playground .seg button {
+  background: transparent;
+  border: 0;
+  border-right: 1px solid rgba(244, 242, 236, 0.15);
+  color: rgba(244, 242, 236, 0.7);
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+.playground .seg button:last-child { border-right: 0; }
+.playground .seg button:hover { color: var(--paper); }
+.playground .seg button.on {
+  background: var(--blue);
+  color: var(--paper);
+}
+.playground .ctrl-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.playground .ctrl-actions button {
+  background: transparent;
+  border: 1px solid rgba(244, 242, 236, 0.35);
+  color: var(--paper);
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.playground .ctrl-actions button:hover {
+  background: var(--paper);
+  color: var(--dark);
+  border-color: var(--paper);
+}
+.playground .ctrl-actions button:active { background: var(--blue); border-color: var(--blue); color: var(--paper); }
+
+/* CHART ──────────────────────────────────────────────────────── */
+.chart-wrap {
+  padding: 24px;
+  border: 1px solid var(--line);
+  background: #FFFFFF;
+}
+.chart-wrap svg { width: 100%; height: auto; display: block; }
+
+/* LIGATURES ──────────────────────────────────────────────────── */
+.lig-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+}
+.lig-cell {
+  border: 1px solid var(--line);
+  padding: 16px;
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.lig-cell svg { width: 100%; height: auto; max-width: 140px; }
+.lig-cell .pair {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+}
+.lig-cell .pair .a { color: var(--blue); }
+.lig-cell .pair .b { color: var(--red); }
+
+/* VARIANTS ───────────────────────────────────────────────────── */
+.variants-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.variants-table th, .variants-table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.variants-table th {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* CODE ───────────────────────────────────────────────────────── */
+pre.code {
+  background: var(--dark);
+  color: var(--paper);
+  padding: 20px 24px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-x: auto;
+  border-left: 3px solid var(--blue);
+}
+pre.code .c { color: rgba(244, 242, 236, 0.45); }
+pre.code .k { color: var(--blue); }
+pre.code .s { color: var(--red); }
+
+/* FOOTER ─────────────────────────────────────────────────────── */
+footer.bottom {
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+p { margin: 0 0 16px; }
+p:last-child { margin-bottom: 0; }
+
+/* Subtle background grid — five vertical lines on the page itself. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to right,
+    transparent 0,
+    transparent calc(20% - 1px),
+    rgba(15, 27, 51, 0.025) calc(20% - 1px),
+    rgba(15, 27, 51, 0.025) 20%
+  );
+  z-index: -1;
+}
