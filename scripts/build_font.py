@@ -125,13 +125,24 @@ def build_font(weight: str = "regular") -> FontBuilder:
     is_bold = weight == "bold"
     # fsSelection bits: 0=italic, 5=bold, 6=regular (mutually exclusive with bold/italic).
     fs_selection = (1 << 5) if is_bold else (1 << 6)
+    # Average advance width — CoreText skips fonts where OS/2.xAvgCharWidth is 0.
+    avg_width = sum(w for w, _ in metrics.values()) // max(len(metrics), 1)
     fb.setupOS2(
         sTypoAscender=ASCENT, sTypoDescender=DESCENT,
         usWinAscent=ASCENT, usWinDescent=-DESCENT,
         usWeightClass=weight_class,
         fsSelection=fs_selection,
         achVendID="VACU",
+        xAvgCharWidth=avg_width,
+        # fsType=0 → installable everywhere. macOS user-scope CTFontManager
+        # rejects fonts with restrictive fsType (e.g. 4 = preview-only) with
+        # OSStatus -50, even though process/session scope accept them.
+        fsType=0,
     )
+    # `head.macStyle` must agree with `fsSelection` (bit 0 = bold, bit 1 = italic).
+    # CoreText/Font Book reject fonts where these disagree.
+    fb.font["head"].macStyle = 1 if is_bold else 0
+    fb.font["head"].lowestRecPPEM = 8
 
     family = f"Vacua {weight.title()}"
     fb.setupNameTable({
