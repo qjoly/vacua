@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vacua"
+version = "0.1.0"
+description = "Experimental modular negative-space font (5×9 grid)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "qjoly" }]
+keywords = ["typography", "font", "modular", "generative", "openscad"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Artistic Software",
+    "License :: OSI Approved :: MIT License",
+]
+dependencies = [
+    "Pillow>=10",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+vacua = "vacua.__main__:main"
+
+[tool.setuptools]
+packages = ["vacua"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
