@@ -245,9 +245,9 @@ img.save(<span class="s">"vacua.png"</span>)</pre>
 
 <script src="vacua.js"></script>
 <script>
-  // Hero — large "VACUA".
+  // Hero — large "VACUA". barW/cell = 0.43 matches Python MEDIUM (6/14).
   document.getElementById("hero-word").innerHTML =
-    Vacua.renderWord("VACUA", { cell: 28, barW: 16, gap: 36 });
+    Vacua.renderWord("VACUA", { cell: 28, barW: 12, gap: 36 });
 
   // Converter — text → Vacua SVG, with weight selector and export.
   const input = document.getElementById("vacua-input");
@@ -255,8 +255,9 @@ img.save(<span class="s">"vacua.png"</span>)</pre>
   const hint = document.getElementById("convert-hint");
   const weightSeg = document.getElementById("weight-seg");
 
-  // barW per weight, at cell=20.
-  const WEIGHTS = { thin: 6, medium: 11, bold: 15 };
+  // barW per weight at cell=20, matching Python variants.py ratios
+  // (REGULAR 4/14, MEDIUM 6/14, BOLD 9/14) scaled to cell=20.
+  const WEIGHTS = { thin: 6, medium: 9, bold: 13 };
   let weight = "medium";
 
   function currentText() {
@@ -354,14 +355,14 @@ img.save(<span class="s">"vacua.png"</span>)</pre>
     setTimeout(() => { btn.textContent = orig; }, 1400);
   });
 
-  // Full alphabet chart.
-  document.getElementById("chart").innerHTML = Vacua.renderChart({ cell: 14, barW: 8, cols: 9 });
+  // Full alphabet chart — Python MEDIUM ratio (6/14).
+  document.getElementById("chart").innerHTML = Vacua.renderChart({ cell: 14, barW: 6, cols: 9 });
 
   // Some pretty ligature pairs.
   const pairs = [["V","B"], ["A","C"], ["E","T"], ["O","X"], ["H","I"], ["M","N"]];
   document.getElementById("lig-grid").innerHTML = pairs.map(([a,b]) => `
     <div class="lig-cell">
-      ${Vacua.renderLigature(a, b, { cell: 12, barW: 6.5 })}
+      ${Vacua.renderLigature(a, b, { cell: 12, barW: 5 })}
       <div class="pair"><span class="a">${a}</span> + <span class="b">${b}</span></div>
     </div>`).join("");
 </script>

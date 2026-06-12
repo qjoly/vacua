@@ -67,7 +67,8 @@ function segs(bands) {
 // opts: {cell, barW, color, rotated, marker}
 function glyphSVG(ch, opts = {}) {
   const cell = opts.cell ?? 10;
-  const barW = opts.barW ?? cell * 0.55;
+  // Default ratio 6/14 ≈ 0.43 — Python MEDIUM (variants.py).
+  const barW = opts.barW ?? cell * (6 / 14);
   const color = opts.color ?? "#0F1B33";
   const showMarker = opts.marker ?? true;
 
@@ -86,10 +87,13 @@ function glyphSVG(ch, opts = {}) {
       parts.push(`<rect x="${cx.toFixed(2)}" y="${y}" width="${barW.toFixed(2)}" height="${h}" fill="${color}"/>`);
     }
   }
-  // Top-left marker: little nub signalling letter start.
+  // Top-left marker (puce): thin horizontal nub signalling letter start.
+  // Python (render.py): puce_w = max(stroke, cell/2), puce_h ≈ 1 px final.
+  // We match that look: width ~ half a cell, height ~ a quarter of barW.
   if (showMarker) {
-    const m = barW * 0.9;
-    parts.push(`<rect x="0" y="-${m * 0.6}" width="${m.toFixed(2)}" height="${(m * 0.6).toFixed(2)}" fill="${color}"/>`);
+    const mw = Math.max(barW, cell / 2);
+    const mh = Math.max(1, barW * 0.25);
+    parts.push(`<rect x="0" y="-${(mh + 1).toFixed(2)}" width="${mw.toFixed(2)}" height="${mh.toFixed(2)}" fill="${color}"/>`);
   }
   return `<g>${parts.join("")}</g>`;
 }
@@ -97,7 +101,7 @@ function glyphSVG(ch, opts = {}) {
 // Render a word as inline SVG. Returns the SVG element.
 function renderWord(text, opts = {}) {
   const cell = opts.cell ?? 12;
-  const barW = opts.barW ?? cell * 0.55;
+  const barW = opts.barW ?? cell * (6 / 14);
   const gap = opts.gap ?? cell * 1.6;
   const spaceW = opts.spaceW ?? cell * 3;
   const color = opts.color ?? "#0F1B33";
@@ -122,7 +126,7 @@ function renderWord(text, opts = {}) {
 // Render a rotation-ligature: glyph A vertical + glyph B rotated 90°, overlaid.
 function renderLigature(a, b, opts = {}) {
   const cell = opts.cell ?? 16;
-  const barW = opts.barW ?? cell * 0.5;
+  const barW = opts.barW ?? cell * (6 / 14);
   const colorA = opts.colorA ?? "#2E6FE8";
   const colorB = opts.colorB ?? "#E15A3C";
   // Square span = max(5, 9) = 9; centering offset for the 5-wide vertical letter.
@@ -140,10 +144,10 @@ function renderLigature(a, b, opts = {}) {
 // Render full alphabet chart (A-Z + ?).
 function renderChart(opts = {}) {
   const cell = opts.cell ?? 10;
-  const barW = opts.barW ?? cell * 0.55;
+  const barW = opts.barW ?? cell * (6 / 14);
   const cols = opts.cols ?? 9;
   const color = opts.color ?? "#0F1B33";
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ?".split("");
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
   const glyphW = N_COLS * cell;
   const glyphH = N_BANDS * cell;
   const gapX = cell * 2;
