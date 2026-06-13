@@ -98,11 +98,25 @@ def _draw_glyph_ss(draw: ImageDraw.ImageDraw, ch: str, x0: int, y0: int, style: 
         # Marker: short horizontal stroke at the top-left, indicating the letter start.
         # Sized to read clearly — wider than a bar, ~half a bar tall.
         puce_w = max(int(stroke * 1.6), cell * 7 // 10)
-        puce_h = max(ss * 2, stroke * 55 // 100)
+        puce_h = max(ss * 3, stroke * 55 // 100)
         draw.rectangle(
             [x0, y0 - puce_h - ss * 2, x0 + puce_w, y0 - ss * 2],
             fill=color,
         )
+
+
+def _tile_layout(style: Style) -> tuple[int, int, int]:
+    """Compute (span, offx, offy) for `glyph_tile`.
+
+    Reserves vertical headroom above the glyph cell so the puce is not clipped.
+    """
+    w = glyph_width(style)
+    h = glyph_height(style)
+    puce_room = (style.stroke + 4) if style.puce else 0
+    span = max(w, h + puce_room)
+    offx = (span - w) // 2
+    offy = puce_room + (span - h - puce_room) // 2
+    return span, offx, offy
 
 
 def glyph_tile(ch: str, style: Style | None = None, rotated: bool = False) -> Image.Image:
@@ -112,11 +126,7 @@ def glyph_tile(ch: str, style: Style | None = None, rotated: bool = False) -> Im
     is NOT square, so rotating without a square base would overflow.
     """
     style = style or Style()
-    w = glyph_width(style)
-    h = glyph_height(style)
-    span = max(w, h)
-    offx = (span - w) // 2
-    offy = (span - h) // 2
+    span, offx, offy = _tile_layout(style)
 
     ss = SS
     img = Image.new("RGBA", (span * ss, span * ss), (0, 0, 0, 0))
@@ -144,10 +154,8 @@ def glyph_on(
         return x + glyph_width(style)
 
     tile = glyph_tile(ch, style=style, rotated=rotated)
-    span = tile.width
-    # Place the (square) tile so that the glyph (centered in the tile) lands at (x, y).
-    offx = (span - glyph_width(style)) // 2
-    offy = (span - glyph_height(style)) // 2
+    # Use the same layout as glyph_tile so the glyph cell lands exactly at (x, y).
+    _, offx, offy = _tile_layout(style)
     canvas.alpha_composite(tile, (x - offx, y - offy))
     tracking = style.cell // 2 if style.tracking is None else style.tracking
     return x + glyph_width(style) + tracking
