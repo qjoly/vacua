@@ -37,10 +37,10 @@ ULTRA_CONDENSED = Style(cell=10, stroke=3, column_mode="joined")
 
 # Ultra-compact: glyphs use the "joined" column packing (no intra-glyph gap)
 # AND `tracking=1` so consecutive letters are separated by a single pixel —
-# almost touching. The puce is disabled because at this density it would
-# visually collide with the preceding glyph's last column.
+# almost touching. The puce sits above the glyph body, so it stays readable
+# even at this density.
 ULTRA_COMPACT = Style(
-    cell=10, stroke=3, column_mode="joined", tracking=1, puce=False,
+    cell=10, stroke=3, column_mode="joined", tracking=1,
 )
 
 
