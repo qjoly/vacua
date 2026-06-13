@@ -25,6 +25,8 @@ def _build_parser() -> argparse.ArgumentParser:
                    help="Font weight.")
     p.add_argument("--mode", "-m", choices=["spaced", "joined", "solid"], default=None,
                    help="Column mode (overrides the one bundled with the weight).")
+    p.add_argument("--variant", choices=sorted(MODES.keys()), default=None,
+                   help="Full pre-baked variant from MODES (overrides --weight and --mode).")
     p.add_argument("--no-puce", action="store_true", help="Disable the letter-start marker.")
     p.add_argument("--chart", action="store_true", help="Generate the A-Z chart (ignores `text`).")
     p.add_argument("--ligature", action="store_true",
@@ -42,7 +44,7 @@ def _build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     args = _build_parser().parse_args(argv)
 
-    style = style_for(args.weight, args.mode)
+    style = MODES[args.variant] if args.variant else style_for(args.weight, args.mode)
     if args.no_puce:
         from dataclasses import replace as _replace
         style = _replace(style, puce=False)

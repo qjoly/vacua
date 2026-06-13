@@ -45,6 +45,7 @@ class Style:
     column_gap: int = 2
     puce: bool = True
     color: tuple[int, int, int, int] = INK_BLUE
+    tracking: int | None = None  # inter-glyph spacing in px; None → cell // 2
 
 
 def _column_x_offsets(style: Style) -> list[int]:
@@ -148,7 +149,8 @@ def glyph_on(
     offx = (span - glyph_width(style)) // 2
     offy = (span - glyph_height(style)) // 2
     canvas.alpha_composite(tile, (x - offx, y - offy))
-    return x + glyph_width(style) + style.cell // 2  # small inter-glyph spacing
+    tracking = style.cell // 2 if style.tracking is None else style.tracking
+    return x + glyph_width(style) + tracking
 
 
 def render_text(
@@ -163,10 +165,11 @@ def render_text(
 
     gw = glyph_width(style)
     gh = glyph_height(style)
-    advance = gw + style.cell // 2
+    tracking = style.cell // 2 if style.tracking is None else style.tracking
+    advance = gw + tracking
 
     visible = [c for c in text if c == SPACE or c in INK_BANDS]
-    width = margin * 2 + max(0, sum(advance for _ in visible) - style.cell // 2)
+    width = margin * 2 + max(0, sum(advance for _ in visible) - tracking)
     width = max(width, gw + 2 * margin)
     height = margin * 2 + gh + (style.stroke + 4)  # +margin for the marker
 

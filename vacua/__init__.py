@@ -28,6 +28,7 @@ from .variants import (
     SOLID,
     SOLID_NARROW,
     THIN_JOINED,
+    ULTRA_COMPACT,
     ULTRA_CONDENSED,
     WEIGHTS,
     style_for,
@@ -42,6 +43,6 @@ __all__ = [
     "compose_rotation_ligature",
     "INK_BLUE", "PAPER", "DARK", "ACCENT_RED",
     "REGULAR", "MEDIUM", "BOLD", "SOLID", "SOLID_NARROW", "THIN_JOINED",
-    "CONDENSED", "ULTRA_CONDENSED", "WEIGHTS", "MODES", "style_for",
+    "CONDENSED", "ULTRA_CONDENSED", "ULTRA_COMPACT", "WEIGHTS", "MODES", "style_for",
     "__version__",
 ]
