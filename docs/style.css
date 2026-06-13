@@ -106,6 +106,10 @@ h2.section-title::after {
   gap: 48px;
   align-items: start;
 }
+/* Grid items default to min-width:auto (= content size). Without this, any
+   long line inside a <pre.code> forces the column to grow past the viewport
+   instead of triggering its own overflow-x:auto scroll. */
+.two-col > * { min-width: 0; }
 @media (max-width: 720px) { .two-col { grid-template-columns: 1fr; gap: 24px; } }
 
 /* PRINCIPLE ──────────────────────────────────────────────────── */
@@ -304,6 +308,7 @@ pre.code {
   font-size: 13px;
   line-height: 1.6;
   overflow-x: auto;
+  max-width: 100%;
   border-left: 3px solid var(--blue);
 }
 pre.code .c { color: rgba(244, 242, 236, 0.45); }
