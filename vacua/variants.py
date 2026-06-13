@@ -35,6 +35,14 @@ THIN_JOINED = Style(cell=14, stroke=3, column_mode="joined")
 CONDENSED = Style(cell=12, stroke=4, column_mode="spaced", column_gap=1)
 ULTRA_CONDENSED = Style(cell=10, stroke=3, column_mode="joined")
 
+# Ultra-compact: glyphs use the "joined" column packing (no intra-glyph gap)
+# AND `tracking=1` so consecutive letters are separated by a single pixel —
+# almost touching. The puce is disabled because at this density it would
+# visually collide with the preceding glyph's last column.
+ULTRA_COMPACT = Style(
+    cell=10, stroke=3, column_mode="joined", tracking=1, puce=False,
+)
+
 
 WEIGHTS: dict[str, Style] = {
     "regular": REGULAR,
@@ -49,6 +57,7 @@ MODES: dict[str, Style] = {
     "solid-narrow": SOLID_NARROW,
     "condensed": CONDENSED,
     "ultra-condensed": ULTRA_CONDENSED,
+    "ultra-compact": ULTRA_COMPACT,
 }
 
 
