@@ -95,10 +95,11 @@ def _draw_glyph_ss(draw: ImageDraw.ImageDraw, ch: str, x0: int, y0: int, style: 
 
     if style.puce:
         # Marker: short horizontal stroke at the top-left, indicating the letter start.
-        puce_w = max(stroke, cell // 2)
-        puce_h = max(ss, stroke // 2)
+        # Sized to read clearly — wider than a bar, ~half a bar tall.
+        puce_w = max(int(stroke * 1.6), cell * 7 // 10)
+        puce_h = max(ss * 2, stroke * 55 // 100)
         draw.rectangle(
-            [x0, y0 - puce_h - ss, x0 + puce_w, y0 - ss],
+            [x0, y0 - puce_h - ss * 2, x0 + puce_w, y0 - ss * 2],
             fill=color,
         )
 

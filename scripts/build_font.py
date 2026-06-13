@@ -27,8 +27,11 @@ from vacua.variants import WEIGHTS
 
 UPM = 1000           # units per em (standard for TTF)
 BAND_H = 100         # 9 bands × 100 = 900 units tall
-ASCENT = 900
+GLYPH_TOP = 900      # top of the 9-band column area
+ASCENT = 1000        # leave 100 units of headroom above the columns for the puce
 DESCENT = -100
+PUCE_GAP = 20        # vertical gap between glyph top and the puce
+PUCE_H = 60          # puce thickness
 
 
 def units_per_col(weight_style) -> tuple[int, int]:
@@ -57,14 +60,25 @@ def build_glyph(ch: str, bar_w: int, col_gap: int) -> tuple[object, int]:
         x0 = col * col_pitch
         x1 = x0 + bar_w
         for b_start, b_end in segs(filled[col]):
-            # Band 0 is at the top → y descends as band index grows.
-            y_top = ASCENT - b_start * BAND_H
-            y_bot = ASCENT - (b_end + 1) * BAND_H
+            # Band 0 is at the top of the 9-band area (GLYPH_TOP).
+            y_top = GLYPH_TOP - b_start * BAND_H
+            y_bot = GLYPH_TOP - (b_end + 1) * BAND_H
             pen.moveTo((x0, y_bot))
             pen.lineTo((x0, y_top))
             pen.lineTo((x1, y_top))
             pen.lineTo((x1, y_bot))
             pen.closePath()
+
+    # Puce: top-left letter-start marker. Same role as the PNG/SVG nub —
+    # wider than a bar, visibly thick. Sits in the headroom above the columns.
+    puce_w = max(int(bar_w * 1.6), int(col_pitch * 0.7))
+    py_bot = GLYPH_TOP + PUCE_GAP
+    py_top = py_bot + PUCE_H
+    pen.moveTo((0, py_bot))
+    pen.lineTo((0, py_top))
+    pen.lineTo((puce_w, py_top))
+    pen.lineTo((puce_w, py_bot))
+    pen.closePath()
 
     advance = N_COLS * col_pitch + col_gap  # trailing side-bearing
     return pen.glyph(), advance
@@ -90,7 +104,7 @@ def build_font(weight: str = "regular") -> FontBuilder:
     # .notdef — empty box
     pen = TTGlyphPen(None)
     notdef_w = N_COLS * (bar_w + col_gap)
-    pen.moveTo((50, 0)); pen.lineTo((50, ASCENT)); pen.lineTo((notdef_w - 50, ASCENT))
+    pen.moveTo((50, 0)); pen.lineTo((50, GLYPH_TOP)); pen.lineTo((notdef_w - 50, GLYPH_TOP))
     pen.lineTo((notdef_w - 50, 0)); pen.closePath()
     glyphs[".notdef"] = pen.glyph()
     metrics[".notdef"] = (notdef_w, 0)

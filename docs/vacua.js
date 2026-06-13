@@ -87,13 +87,12 @@ function glyphSVG(ch, opts = {}) {
       parts.push(`<rect x="${cx.toFixed(2)}" y="${y}" width="${barW.toFixed(2)}" height="${h}" fill="${color}"/>`);
     }
   }
-  // Top-left marker (puce): thin horizontal nub signalling letter start.
-  // Python (render.py): puce_w = max(stroke, cell/2), puce_h ≈ 1 px final.
-  // We match that look: width ~ half a cell, height ~ a quarter of barW.
+  // Top-left marker (puce): horizontal nub signalling letter start.
+  // Sized to be clearly visible — wider than a bar, ~half a bar tall.
   if (showMarker) {
-    const mw = Math.max(barW, cell / 2);
-    const mh = Math.max(1, barW * 0.25);
-    parts.push(`<rect x="0" y="-${(mh + 1).toFixed(2)}" width="${mw.toFixed(2)}" height="${mh.toFixed(2)}" fill="${color}"/>`);
+    const mw = Math.max(barW * 1.6, cell * 0.7);
+    const mh = Math.max(2, barW * 0.55);
+    parts.push(`<rect x="0" y="-${(mh + 2).toFixed(2)}" width="${mw.toFixed(2)}" height="${mh.toFixed(2)}" fill="${color}"/>`);
   }
   return `<g>${parts.join("")}</g>`;
 }
