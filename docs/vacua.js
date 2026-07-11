@@ -122,6 +122,21 @@ function renderWord(text, opts = {}) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalW.toFixed(2)} ${totalH.toFixed(2)}" preserveAspectRatio="xMidYMid meet">${groups.join("")}</svg>`;
 }
 
+// One ligature cell: glyph A vertical + glyph B rotated 90°, overlaid in a
+// square of side `size`. A missing/space letter is simply skipped.
+function ligatureCell(a, b, cell, barW, colorA, colorB, size, offx) {
+  const parts = [];
+  // Letter A: vertical, centered horizontally.
+  if (a && a !== " " && INK_BANDS[a]) {
+    parts.push(`<g transform="translate(${offx},0)">${glyphSVG(a, { cell, barW, color: colorA, marker: false })}</g>`);
+  }
+  // Letter B: rotated 90° clockwise around the square center.
+  if (b && b !== " " && INK_BANDS[b]) {
+    parts.push(`<g transform="rotate(90 ${size / 2} ${size / 2}) translate(${offx},0)">${glyphSVG(b, { cell, barW, color: colorB, marker: false })}</g>`);
+  }
+  return parts.join("");
+}
+
 // Render a rotation-ligature: glyph A vertical + glyph B rotated 90°, overlaid.
 function renderLigature(a, b, opts = {}) {
   const cell = opts.cell ?? 16;
@@ -133,11 +148,37 @@ function renderLigature(a, b, opts = {}) {
   const offx = ((N_BANDS - N_COLS) / 2) * cell;
   const size = span * cell;
   const pad = cell;
-  // Letter A: vertical, centered horizontally.
-  const aSVG = `<g transform="translate(${offx},0)">${glyphSVG(a, { cell, barW, color: colorA, marker: false })}</g>`;
-  // Letter B: rotated 90° clockwise around the square center.
-  const bSVG = `<g transform="rotate(90 ${size / 2} ${size / 2}) translate(${offx},0)">${glyphSVG(b, { cell, barW, color: colorB, marker: false })}</g>`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${-pad} ${-pad} ${size + pad * 2} ${size + pad * 2}" preserveAspectRatio="xMidYMid meet">${aSVG}${bSVG}</svg>`;
+  const cellSVG = ligatureCell(a, b, cell, barW, colorA, colorB, size, offx);
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${-pad} ${-pad} ${size + pad * 2} ${size + pad * 2}" preserveAspectRatio="xMidYMid meet">${cellSVG}</svg>`;
+}
+
+// Render a whole word as rotation ligatures: letters are chunked into pairs,
+// each pair overlaid in one square (2nd letter rotated 90°). An odd trailing
+// letter stands alone in its own square.
+function renderWordLigatures(text, opts = {}) {
+  const cell = opts.cell ?? 16;
+  const barW = opts.barW ?? cell * (6 / 14);
+  const colorA = opts.colorA ?? "#2E6FE8";
+  const colorB = opts.colorB ?? "#E15A3C";
+  const span = N_BANDS;
+  const offx = ((N_BANDS - N_COLS) / 2) * cell;
+  const size = span * cell;
+  const pad = cell;
+  const gap = opts.gap ?? cell * 1.2;
+
+  const chars = [...text.toUpperCase()].filter(ch => INK_BANDS[ch]);
+  const cells = [];
+  for (let i = 0; i < chars.length; i += 2) {
+    cells.push([chars[i], chars[i + 1] ?? " "]);
+  }
+  if (!cells.length) cells.push([" ", " "]);
+
+  const groups = cells.map(([a, b], i) => {
+    const x = i * (size + gap);
+    return `<g transform="translate(${x.toFixed(2)},0)">${ligatureCell(a, b, cell, barW, colorA, colorB, size, offx)}</g>`;
+  });
+  const totalW = cells.length * size + (cells.length - 1) * gap;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${-pad} ${-pad} ${(totalW + pad * 2).toFixed(2)} ${size + pad * 2}" preserveAspectRatio="xMidYMid meet">${groups.join("")}</svg>`;
 }
 
 // Render full alphabet chart (A-Z + ?).
@@ -166,4 +207,4 @@ function renderChart(opts = {}) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalW} ${totalH}" preserveAspectRatio="xMidYMid meet">${groups.join("")}</svg>`;
 }
 
-window.Vacua = { renderWord, renderLigature, renderChart, INK_BANDS, glyphSVG };
+window.Vacua = { renderWord, renderLigature, renderWordLigatures, renderChart, INK_BANDS, glyphSVG };

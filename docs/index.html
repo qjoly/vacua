@@ -122,6 +122,12 @@
             <button type="button" data-w="bold">Bold</button>
           </div>
         </div>
+        <div class="ctrl">
+          <span class="ctrl-label">Ligatures</span>
+          <div class="seg" id="lig-seg">
+            <button type="button" id="lig-toggle">Rotation</button>
+          </div>
+        </div>
         <div class="ctrl-spacer"></div>
         <div class="ctrl-actions">
           <button type="button" id="dl-svg">Download SVG</button>
@@ -275,11 +281,13 @@ mise run uninstall</pre>
   const render = document.getElementById("vacua-render");
   const hint = document.getElementById("convert-hint");
   const weightSeg = document.getElementById("weight-seg");
+  const ligToggle = document.getElementById("lig-toggle");
 
   // barW per weight at cell=20, matching Python variants.py ratios
   // (REGULAR 4/14, MEDIUM 6/14, BOLD 9/14) scaled to cell=20.
   const WEIGHTS = { thin: 6, medium: 9, bold: 13 };
   let weight = "medium";
+  let ligature = false;
 
   function currentText() {
     return (input.value || "").toUpperCase();
@@ -297,11 +305,16 @@ mise run uninstall</pre>
   function paint() {
     const t = currentText() || " ";
     const barW = WEIGHTS[weight];
-    render.innerHTML = Vacua.renderWord(t, { cell: 20, barW, gap: 26, color: "#F4F2EC" });
+    render.innerHTML = ligature
+      ? Vacua.renderWordLigatures(t, { cell: 16, barW })
+      : Vacua.renderWord(t, { cell: 20, barW, gap: 26, color: "#F4F2EC" });
     const bad = unsupportedChars(t);
     if (bad.length) {
       hint.textContent = `Ignored (not in alphabet): ${bad.map(c => JSON.stringify(c)).join(" ")}`;
       hint.style.color = "#E15A3C";
+    } else if (ligature) {
+      hint.textContent = `Rotation ligatures · letters paired 2-by-2, the 2nd rotated 90° over the 1st`;
+      hint.style.color = "";
     } else {
       hint.textContent = `A–Z and "?" only · the top-left nub is the start-of-letter marker`;
       hint.style.color = "";
@@ -309,6 +322,11 @@ mise run uninstall</pre>
   }
 
   input.addEventListener("input", paint);
+  ligToggle.addEventListener("click", () => {
+    ligature = !ligature;
+    ligToggle.classList.toggle("on", ligature);
+    paint();
+  });
   weightSeg.addEventListener("click", e => {
     const btn = e.target.closest("button[data-w]");
     if (!btn) return;
@@ -321,12 +339,14 @@ mise run uninstall</pre>
   // Exports — re-render at a chosen color for download (dark on paper).
   function exportSVG() {
     const t = currentText() || " ";
-    return Vacua.renderWord(t, { cell: 20, barW: WEIGHTS[weight], gap: 26, color: "#0F1B33" });
+    return ligature
+      ? Vacua.renderWordLigatures(t, { cell: 16, barW: WEIGHTS[weight] })
+      : Vacua.renderWord(t, { cell: 20, barW: WEIGHTS[weight], gap: 26, color: "#0F1B33" });
   }
 
   function safeName() {
     const t = currentText().replace(/[^A-Z0-9?]+/g, "_").replace(/^_+|_+$/g, "");
-    return (t || "vacua") + "-" + weight;
+    return (t || "vacua") + "-" + weight + (ligature ? "-lig" : "");
   }
 
   function downloadBlob(blob, filename) {
