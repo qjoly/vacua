@@ -188,13 +188,13 @@ h2.section-title::after {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 24px;
+  gap: 16px;
 }
 .playground .ctrl-spacer { flex: 1; }
 .playground .ctrl {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 .playground .ctrl-label {
   font-size: 11px;
@@ -212,10 +212,10 @@ h2.section-title::after {
   border-right: 1px solid rgba(244, 242, 236, 0.15);
   color: rgba(244, 242, 236, 0.7);
   font: inherit;
-  font-size: 11px;
-  letter-spacing: 0.16em;
+  font-size: 10px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 8px 14px;
+  padding: 6px 10px;
   cursor: pointer;
 }
 .playground .seg button:last-child { border-right: 0; }
@@ -224,6 +224,11 @@ h2.section-title::after {
   background: var(--blue);
   color: var(--paper);
 }
+.playground .seg button.off {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.playground .seg button.off:hover { color: rgba(244, 242, 236, 0.7); }
 .playground .ctrl-actions {
   display: flex;
   gap: 8px;
@@ -234,10 +239,10 @@ h2.section-title::after {
   border: 1px solid rgba(244, 242, 236, 0.35);
   color: var(--paper);
   font: inherit;
-  font-size: 11px;
-  letter-spacing: 0.16em;
+  font-size: 10px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 8px 14px;
+  padding: 6px 10px;
   cursor: pointer;
   transition: background 0.12s, color 0.12s, border-color 0.12s;
 }
